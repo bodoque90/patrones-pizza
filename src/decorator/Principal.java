@@ -1,7 +1,7 @@
 
 package decorator;
 
-import observer.Pedido;
+import state.Pedido;
 
 public class Principal {
 

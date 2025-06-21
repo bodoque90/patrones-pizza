@@ -1,5 +1,5 @@
 
-package observer;
+package state;
 public interface IEstadoPizza {
     String getNombre();
     void estadoRecibido(Pedido pedido);

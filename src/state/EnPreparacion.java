@@ -1,5 +1,5 @@
 
-package observer;
+package state;
 
 
 public class EnPreparacion implements IEstadoPizza{
