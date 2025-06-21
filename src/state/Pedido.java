@@ -12,7 +12,6 @@ public class Pedido {
         this.precio = precioPedido;
         
     }
-
     public void recibido() {
         this.estado.estadoRecibido(this);
     }
