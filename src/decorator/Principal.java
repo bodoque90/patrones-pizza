@@ -12,8 +12,13 @@ public class Principal {
         int precio = pz1.getPrecio();
         Pedido p1 = new Pedido(nombre,precio);
         
-        Usuario u1 = new Usuario(nombre);
-        u1.Notificar(p1);
+        Usuario u1 = new Usuario("juan carlos");
+        p1.agregarUsuario(u1);
+        
+        p1.enPreparacion();
+        p1.entregado();
+        p1.enPreparacion();
+        p1.Print();
 
 
         
