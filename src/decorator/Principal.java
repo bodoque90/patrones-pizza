@@ -7,8 +7,10 @@ public class Principal {
 
     public static void main(String[] args) {
         IPizza pz1 = new pizzaNapolitana();
+        //pz1 = new extraBarbeque(pz1);
         String nombre = pz1.getDescripcion();
-        Pedido p1 = new Pedido(nombre);
+        int precio = pz1.getPrecio();
+        Pedido p1 = new Pedido(nombre,precio);
         p1.enPreparacion();
         p1.entregado();
         p1.recibido();
