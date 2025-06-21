@@ -2,5 +2,7 @@
 package observer;
 public interface IEstadoPizza {
     String getNombre();
-    void recibido();
+    void estadoRecibido(Pedido pedido);
+    void estadoPreparacion(Pedido pedido);
+    void estadoEntregado(Pedido pedido);
 }

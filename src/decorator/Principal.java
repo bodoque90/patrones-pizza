@@ -1,13 +1,18 @@
 
 package decorator;
 
+import observer.Pedido;
+
 public class Principal {
 
     public static void main(String[] args) {
-        IPizza pizzaejemplo = new pizzaNapolitana();
-        IPizza pizzaejem2 = new pizzaPepperoni();
-        pizzaejem2 = new extraBarbeque(pizzaejem2);
-        System.out.println(pizzaejem2.getDescripcion()+" + "+pizzaejem2.getPrecio());
+        IPizza pz1 = new pizzaNapolitana();
+        String nombre = pz1.getDescripcion();
+        Pedido p1 = new Pedido(nombre);
+        p1.enPreparacion();
+        p1.entregado();
+        p1.recibido();
+        p1.Print();
     }
     
 }
