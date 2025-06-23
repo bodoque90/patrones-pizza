@@ -1,6 +1,7 @@
 
 package decorator;
 
+import Vistas.frmCrud;
 import state.Pedido;
 import observer.Usuario;
 public class Principal {
@@ -19,7 +20,10 @@ public class Principal {
         p1.entregado();
         p1.enPreparacion();
         p1.Print();
-
+        
+        
+        frmCrud formulario = new frmCrud();
+        formulario.setVisible(true);
 
         
         

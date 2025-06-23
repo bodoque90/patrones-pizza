@@ -10,6 +10,7 @@ import decorator.extraPeperoni;
 import decorator.extraQueso;
 import decorator.pizzaNapolitana;
 import decorator.pizzaPepperoni;
+import javax.swing.JOptionPane;
 import state.Pedido;
 
 /**
@@ -42,10 +43,12 @@ public class frmCrud extends javax.swing.JFrame {
         if (chkExtraBbq.isSelected()) {
             base = new extraBarbeque(base);
         }
-        if (chkExtraBbq.isSelected()) {
+        if (chkExtraPepp.isSelected()) {
             base = new extraPeperoni(base);
         }
-        //pedido = new Pedido(base.getDescripcion(), base.getPrecio());
+
+        Pedido pedido = new Pedido(base.getDescripcion(), base.getPrecio());
+        JOptionPane.showMessageDialog(null, "Producto: " + base.getDescripcion() + " $" + base.getPrecio() + "agregado exitosamente..");
     }
 
     /**
@@ -64,6 +67,7 @@ public class frmCrud extends javax.swing.JFrame {
         chkExtraQueso = new javax.swing.JCheckBox();
         chkExtraBbq = new javax.swing.JCheckBox();
         chkExtraPepp = new javax.swing.JCheckBox();
+        btnAgregar = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -78,11 +82,12 @@ public class frmCrud extends javax.swing.JFrame {
                 txtNombreUserActionPerformed(evt);
             }
         });
-        jPanel1.add(txtNombreUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 120, 180, -1));
+        jPanel1.add(txtNombreUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 80, 180, -1));
 
         jLabel2.setText("Seleccione la pizza");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 60, -1, -1));
 
+        cmbPizza.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "napolitana", "pepperoni", " " }));
         jPanel1.add(cmbPizza, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 80, 180, -1));
 
         jLabel3.setText("Desea Agregar extras");
@@ -97,17 +102,23 @@ public class frmCrud extends javax.swing.JFrame {
         chkExtraPepp.setText("Pepperoni Extra");
         jPanel1.add(chkExtraPepp, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 170, 120, -1));
 
+        btnAgregar.setText("Agregar");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 220, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 846, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 594, Short.MAX_VALUE)
         );
 
         pack();
@@ -116,6 +127,11 @@ public class frmCrud extends javax.swing.JFrame {
     private void txtNombreUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreUserActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNombreUserActionPerformed
+
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        crearNuevaPizza();
+
+    }//GEN-LAST:event_btnAgregarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -153,6 +169,7 @@ public class frmCrud extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JToggleButton btnAgregar;
     private javax.swing.JCheckBox chkExtraBbq;
     private javax.swing.JCheckBox chkExtraPepp;
     private javax.swing.JCheckBox chkExtraQueso;
