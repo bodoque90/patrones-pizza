@@ -4,6 +4,14 @@
  */
 package Vistas;
 
+import decorator.IPizza;
+import decorator.extraBarbeque;
+import decorator.extraPeperoni;
+import decorator.extraQueso;
+import decorator.pizzaNapolitana;
+import decorator.pizzaPepperoni;
+import state.Pedido;
+
 /**
  *
  * @author Hogar
@@ -15,7 +23,29 @@ public class frmCrud extends javax.swing.JFrame {
      */
     public frmCrud() {
         initComponents();
-        setSize(700,700);
+        setSize(750, 750);
+        setResizable(false);
+
+        setName("Pizzeria Don Titto de Crem");
+    }
+
+    private void crearNuevaPizza() {
+        IPizza base;
+        if (cmbPizza.getSelectedItem().equals("napolitana")) {
+            base = new pizzaNapolitana();
+        } else {
+            base = new pizzaPepperoni();
+        }
+        if (chkExtraQueso.isSelected()) {
+            base = new extraQueso(base);
+        }
+        if (chkExtraBbq.isSelected()) {
+            base = new extraBarbeque(base);
+        }
+        if (chkExtraBbq.isSelected()) {
+            base = new extraPeperoni(base);
+        }
+        //pedido = new Pedido(base.getDescripcion(), base.getPrecio());
     }
 
     /**
@@ -25,17 +55,53 @@ public class frmCrud extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        txtNombreUser = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        cmbPizza = new javax.swing.JComboBox<>();
+        jLabel3 = new javax.swing.JLabel();
+        chkExtraQueso = new javax.swing.JCheckBox();
+        chkExtraBbq = new javax.swing.JCheckBox();
+        chkExtraPepp = new javax.swing.JCheckBox();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setBackground(new java.awt.Color(102, 102, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setText("Nombre del Cliente");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(58, 59, 150, -1));
+        jPanel1.add(txtNombreUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 80, 180, -1));
+
+        jLabel2.setText("Seleccione la pizza");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 60, -1, -1));
+
+        jPanel1.add(cmbPizza, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 80, 180, -1));
+
+        jLabel3.setText("Desea Agregar extras");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 60, -1, -1));
+
+        chkExtraQueso.setText("Queso Extra");
+        jPanel1.add(chkExtraQueso, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 90, -1, -1));
+
+        chkExtraBbq.setText("Barbeque Extra");
+        jPanel1.add(chkExtraBbq, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 130, 120, -1));
+
+        chkExtraPepp.setText("Pepperoni Extra");
+        jPanel1.add(chkExtraPepp, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 170, 120, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 664, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 492, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -77,5 +143,14 @@ public class frmCrud extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox chkExtraBbq;
+    private javax.swing.JCheckBox chkExtraPepp;
+    private javax.swing.JCheckBox chkExtraQueso;
+    private javax.swing.JComboBox<String> cmbPizza;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField txtNombreUser;
     // End of variables declaration//GEN-END:variables
 }
