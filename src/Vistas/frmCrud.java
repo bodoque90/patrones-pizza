@@ -72,7 +72,13 @@ public class frmCrud extends javax.swing.JFrame {
 
         jLabel1.setText("Nombre del Cliente");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(58, 59, 150, -1));
-        jPanel1.add(txtNombreUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 80, 180, -1));
+
+        txtNombreUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNombreUserActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtNombreUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 120, 180, -1));
 
         jLabel2.setText("Seleccione la pizza");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 60, -1, -1));
@@ -106,6 +112,10 @@ public class frmCrud extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtNombreUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreUserActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNombreUserActionPerformed
 
     /**
      * @param args the command line arguments
