@@ -60,6 +60,13 @@ public class Pedido {
         this.estado = estado;
 
     }
+        public String getNombrePizza() {
+        return nombre;
+    }
+
+    public int getPrecioTotal() {
+        return precio;
+    }
     
     public String getEstadoNombre() {
     return this.estado.getNombre();

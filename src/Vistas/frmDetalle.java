@@ -1,6 +1,7 @@
 package Vistas;
 
 import ConexionBs.conexion;
+import Controller.pedidosController;
 import com.sun.jdi.connect.spi.Connection;
 import javax.swing.table.DefaultTableModel;
 import java.sql.PreparedStatement;
@@ -25,82 +26,48 @@ public class frmDetalle extends javax.swing.JFrame {
     private Pedido pedidoActual;
 
     private void buscarPedido() {
+        conexion conectar = new conexion();
+        conectar.establecerConexion();
+        pedidosController pedidosController1 = new pedidosController(conectar);
         try {
             int idCliente = Integer.parseInt(txtIdCliente.getText().trim());
-            // Cambia los datos de conexión según tu proyecto
-            String sql = "SELECT nombrePizza, precioTotal, estado FROM pedidos WHERE idCliente = ?";
-            conexion objConexion = new conexion();
-            PreparedStatement consultaPreparada = objConexion.establecerConexion().prepareStatement(sql);
-            consultaPreparada.setInt(1, idCliente);
-            objConexion.Resultado = consultaPreparada.executeQuery();
+            pedidoActual = pedidosController1.buscarPedidoPorId(idCliente);
 
-            if (objConexion.Resultado.next()) {
-                String nombre = objConexion.Resultado.getString("nombrePizza");
-                int precio = objConexion.Resultado.getInt("precioTotal");
-                String estadoBD = objConexion.Resultado.getString("estado");
-
-                IEstadoPizza estado = Pedido.obtenerEstadoDesdeNombre(estadoBD);
-                pedidoActual = new Pedido(nombre, precio, estado);
-                
-
-                txtPizza.setText(nombre);
-                txtPrecio.setText(String.valueOf(precio));
-                txtEstadoActual.setText(estadoBD);
-
+            if (pedidoActual != null) {
+                txtPizza.setText(pedidoActual.getNombrePizza());
+                txtPrecio.setText(String.valueOf(pedidoActual.getPrecioTotal()));
+                txtEstadoActual.setText(pedidoActual.getEstadoNombre());
             } else {
                 JOptionPane.showMessageDialog(this, "No se encontró pedido para ese ID de cliente");
-                pedidoActual = null;
-                txtPizza.setText("");
-                txtPrecio.setText("");
-                txtEstadoActual.setText("");
             }
-
-            objConexion.cerrarConexion();
-
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error al buscar pedido: " + ex.getMessage());
         }
     }
-    
-     private void cambiarEstadoPedido() {
-    if (pedidoActual == null) {
-        JOptionPane.showMessageDialog(this, "Primero busque un pedido.");
-        return;
-    }
-    String nuevoEstado = (String) cmbEstados.getSelectedItem();
 
-    try {
-        String estadoAntes = pedidoActual.getEstadoNombre();
-
-        // Intentar el cambio de estado
-        if (nuevoEstado.equals("En preparación")) {
-            pedidoActual.enPreparacion();
-        } else if (nuevoEstado.equals("Entregado")) {
-            pedidoActual.entregado();
+    private void cambiarEstadoPedido() {
+        conexion conectar = new conexion();
+        conectar.establecerConexion();
+        pedidosController pedidosController1 = new pedidosController(conectar);
+        if (pedidoActual == null) {
+            JOptionPane.showMessageDialog(this, "Primero busque un pedido.");
+            return;
         }
-
-        // Actualiza el campo visual
-        txtEstadoActual.setText(pedidoActual.getEstadoNombre());
-
-        // Solo actualiza la BD si el estado cambió realmente
-        if (pedidoActual.getEstadoNombre().equals(nuevoEstado) && !estadoAntes.equals(nuevoEstado)) {
-            int idCliente = Integer.parseInt(txtIdCliente.getText().trim());
-            String sqlUpdate = "UPDATE pedidos SET estado = ? WHERE idCliente = ?";
-            conexion objConexion = new conexion();
-            PreparedStatement psUpdate = objConexion.establecerConexion().prepareStatement(sqlUpdate);
-            psUpdate.setString(1, nuevoEstado);
-            psUpdate.setInt(2, idCliente);
-            psUpdate.executeUpdate();
-            objConexion.cerrarConexion();
-            datosTabla();
-        } else if (!estadoAntes.equals(nuevoEstado)) {
-            JOptionPane.showMessageDialog(this, "¡Transición de estado inválida! Debes seguir el orden correcto.");
+        String nuevoEstado = (String) cmbEstados.getSelectedItem();
+        int idCliente = Integer.parseInt(txtIdCliente.getText().trim());
+        try {
+            boolean cambio = pedidosController1.cambiarEstadoPedido(pedidoActual, nuevoEstado, idCliente);
+            txtEstadoActual.setText(pedidoActual.getEstadoNombre());
+            if (!cambio) {
+                JOptionPane.showMessageDialog(this, "¡Transición de estado inválida! Debes seguir el orden correcto.");
+            } else {
+                // Si tienes una tabla, refresca aquí
+                datosTabla();
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al cambiar estado: " + ex.getMessage());
         }
-
-    } catch (Exception ex) {
-        JOptionPane.showMessageDialog(this, "Error al cambiar estado: " + ex.getMessage());
     }
-}
 
     public void datosTabla() {
         conexion objConexion = new conexion();
@@ -241,7 +208,7 @@ public class frmDetalle extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnCambiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarActionPerformed
-cambiarEstadoPedido();
+        cambiarEstadoPedido();
     }//GEN-LAST:event_btnCambiarActionPerformed
 
     /**
