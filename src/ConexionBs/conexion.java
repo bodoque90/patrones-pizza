@@ -2,7 +2,9 @@ package ConexionBs;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class conexion {
 
@@ -13,6 +15,9 @@ public class conexion {
 
     Connection estadoConexion = null;
 
+    public Statement sentencia;
+    public ResultSet Resultado;
+    
     public Connection establecerConexion() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");

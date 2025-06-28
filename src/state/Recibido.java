@@ -1,28 +1,25 @@
 
 package state;
 
+import javax.swing.JOptionPane;
+
 
 public class Recibido implements IEstadoPizza{
 
     @Override
-    public String getNombre() {
-       return "Recibido";
-    }
-
-    @Override
     public void estadoRecibido(Pedido pedido) {
-        System.out.println("El Pedido ya se encuentra recibido");
+        // Ya está en recibido, no hace nada
     }
-
     @Override
     public void estadoPreparacion(Pedido pedido) {
         pedido.cambiarEstado(new EnPreparacion());
-        System.out.println("Pedido en preparacion.");
     }
-
     @Override
     public void estadoEntregado(Pedido pedido) {
-        System.out.println("el pedido debe pasar por preparacion");
+        // NO PERMITIDO: Saltar directo de Recibido a Entregado
+        JOptionPane.showMessageDialog(null, "No puedes entregar un pedido que no está en preparación.");
     }
-    
+    @Override
+    public String getNombre() { return "Recibido"; }
 }
+    

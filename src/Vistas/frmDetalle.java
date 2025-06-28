@@ -1,14 +1,144 @@
-
 package Vistas;
 
+import ConexionBs.conexion;
+import com.sun.jdi.connect.spi.Connection;
+import javax.swing.table.DefaultTableModel;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import observer.Usuario;
+import state.IEstadoPizza;
+import state.Pedido;
 
 public class frmDetalle extends javax.swing.JFrame {
 
- 
     public frmDetalle() {
         initComponents();
-        setSize(750,700);
+        setSize(750, 700);
         setResizable(false);
+        datosTabla();
+        txtPizza.setEditable(false);
+        txtPrecio.setEditable(false);
+        txtEstadoActual.setEditable(false);
+    }
+    private Pedido pedidoActual;
+
+    private void buscarPedido() {
+        try {
+            int idCliente = Integer.parseInt(txtIdCliente.getText().trim());
+            // Cambia los datos de conexión según tu proyecto
+            String sql = "SELECT nombrePizza, precioTotal, estado FROM pedidos WHERE idCliente = ?";
+            conexion objConexion = new conexion();
+            PreparedStatement consultaPreparada = objConexion.establecerConexion().prepareStatement(sql);
+            consultaPreparada.setInt(1, idCliente);
+            objConexion.Resultado = consultaPreparada.executeQuery();
+
+            if (objConexion.Resultado.next()) {
+                String nombre = objConexion.Resultado.getString("nombrePizza");
+                int precio = objConexion.Resultado.getInt("precioTotal");
+                String estadoBD = objConexion.Resultado.getString("estado");
+
+                IEstadoPizza estado = Pedido.obtenerEstadoDesdeNombre(estadoBD);
+                pedidoActual = new Pedido(nombre, precio, estado);
+                
+
+                txtPizza.setText(nombre);
+                txtPrecio.setText(String.valueOf(precio));
+                txtEstadoActual.setText(estadoBD);
+
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontró pedido para ese ID de cliente");
+                pedidoActual = null;
+                txtPizza.setText("");
+                txtPrecio.setText("");
+                txtEstadoActual.setText("");
+            }
+
+            objConexion.cerrarConexion();
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al buscar pedido: " + ex.getMessage());
+        }
+    }
+    
+     private void cambiarEstadoPedido() {
+    if (pedidoActual == null) {
+        JOptionPane.showMessageDialog(this, "Primero busque un pedido.");
+        return;
+    }
+    String nuevoEstado = (String) cmbEstados.getSelectedItem();
+
+    try {
+        String estadoAntes = pedidoActual.getEstadoNombre();
+
+        // Intentar el cambio de estado
+        if (nuevoEstado.equals("En preparación")) {
+            pedidoActual.enPreparacion();
+        } else if (nuevoEstado.equals("Entregado")) {
+            pedidoActual.entregado();
+        }
+
+        // Actualiza el campo visual
+        txtEstadoActual.setText(pedidoActual.getEstadoNombre());
+
+        // Solo actualiza la BD si el estado cambió realmente
+        if (pedidoActual.getEstadoNombre().equals(nuevoEstado) && !estadoAntes.equals(nuevoEstado)) {
+            int idCliente = Integer.parseInt(txtIdCliente.getText().trim());
+            String sqlUpdate = "UPDATE pedidos SET estado = ? WHERE idCliente = ?";
+            conexion objConexion = new conexion();
+            PreparedStatement psUpdate = objConexion.establecerConexion().prepareStatement(sqlUpdate);
+            psUpdate.setString(1, nuevoEstado);
+            psUpdate.setInt(2, idCliente);
+            psUpdate.executeUpdate();
+            objConexion.cerrarConexion();
+            datosTabla();
+        } else if (!estadoAntes.equals(nuevoEstado)) {
+            JOptionPane.showMessageDialog(this, "¡Transición de estado inválida! Debes seguir el orden correcto.");
+        }
+
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this, "Error al cambiar estado: " + ex.getMessage());
+    }
+}
+
+    public void datosTabla() {
+        conexion objConexion = new conexion();
+        DefaultTableModel nuevoObjModelo = new DefaultTableModel();
+
+        // Agrega las columnas que quieras mostrar
+        nuevoObjModelo.addColumn("Id Cliente");
+        nuevoObjModelo.addColumn("Nombre Cliente");
+        nuevoObjModelo.addColumn("Id Pedido");
+        nuevoObjModelo.addColumn("Pizza");
+        nuevoObjModelo.addColumn("Estado");
+        nuevoObjModelo.addColumn("Precio Total");
+
+        tblDetalle.setModel(nuevoObjModelo);
+
+        String[] datosBD = new String[6];
+        try {
+            Statement leerDatos = objConexion.establecerConexion().createStatement();
+            String sql = "SELECT c.idCliente, c.nombre AS nombreCliente, p.idPedido, p.nombrePizza, p.estado, p.precioTotal "
+                    + "FROM clientes c JOIN pedidos p ON c.idCliente = p.idCliente";
+            ResultSet resultado = leerDatos.executeQuery(sql);
+
+            while (resultado.next()) {
+                datosBD[0] = resultado.getString("idCliente");
+                datosBD[1] = resultado.getString("nombreCliente");
+                datosBD[2] = resultado.getString("idPedido");
+                datosBD[3] = resultado.getString("nombrePizza");
+                datosBD[4] = resultado.getString("estado");
+                datosBD[5] = resultado.getString("precioTotal");
+                nuevoObjModelo.addRow(datosBD.clone()); // Usa clone para evitar sobrescribir filas
+            }
+            tblDetalle.setModel(nuevoObjModelo);
+
+            objConexion.cerrarConexion();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al obtener los datos: " + ex.getMessage());
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -16,23 +146,29 @@ public class frmDetalle extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        txtID = new javax.swing.JTextField();
+        txtIdCliente = new javax.swing.JTextField();
         lblPedido = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDetalle = new javax.swing.JTable();
         btnVolver = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
+        txtPizza = new javax.swing.JTextField();
+        txtPrecio = new javax.swing.JTextField();
+        txtEstadoActual = new javax.swing.JTextField();
+        btnCambiar = new javax.swing.JButton();
+        cmbEstados = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(0, 102, 102));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel1.add(txtID, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, 150, -1));
+        jPanel1.add(txtIdCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 70, -1));
 
         lblPedido.setBackground(new java.awt.Color(0, 0, 0));
         lblPedido.setForeground(new java.awt.Color(0, 0, 0));
-        lblPedido.setText("ID de Pedido");
-        jPanel1.add(lblPedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, -1, -1));
+        lblPedido.setText("ID del Cliente");
+        jPanel1.add(lblPedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, -1, -1));
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 290, -1, -1));
 
         tblDetalle.setModel(new javax.swing.table.DefaultTableModel(
@@ -58,6 +194,28 @@ public class frmDetalle extends javax.swing.JFrame {
         });
         jPanel1.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 630, -1, -1));
 
+        btnBuscar.setText("buscar pedido");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 70, 110, 40));
+        jPanel1.add(txtPizza, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 20, 190, -1));
+        jPanel1.add(txtPrecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 50, 190, -1));
+        jPanel1.add(txtEstadoActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 80, 190, -1));
+
+        btnCambiar.setText("Cambiar Estado");
+        btnCambiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCambiarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnCambiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 80, 130, -1));
+
+        cmbEstados.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "En preparación", "Entregado" }));
+        jPanel1.add(cmbEstados, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 20, 140, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -77,6 +235,14 @@ public class frmDetalle extends javax.swing.JFrame {
         inicio.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        buscarPedido();
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnCambiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarActionPerformed
+cambiarEstadoPedido();
+    }//GEN-LAST:event_btnCambiarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -114,12 +280,18 @@ public class frmDetalle extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnCambiar;
     private javax.swing.JButton btnVolver;
+    private javax.swing.JComboBox<String> cmbEstados;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblPedido;
     private javax.swing.JTable tblDetalle;
-    private javax.swing.JTextField txtID;
+    private javax.swing.JTextField txtEstadoActual;
+    private javax.swing.JTextField txtIdCliente;
+    private javax.swing.JTextField txtPizza;
+    private javax.swing.JTextField txtPrecio;
     // End of variables declaration//GEN-END:variables
 }

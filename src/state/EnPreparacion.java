@@ -1,28 +1,24 @@
 
 package state;
 
+import javax.swing.JOptionPane;
+
 
 public class EnPreparacion implements IEstadoPizza{
 
-    @Override
-    public String getNombre() {
-         return "En preparacion";
-    }
-
-    @Override
+@Override
     public void estadoRecibido(Pedido pedido) {
-        System.out.println("el pedido ya empezo a prepararse");
+        // NO PERMITIDO: Volver atrás
+        JOptionPane.showMessageDialog(null, "No puedes volver a 'Recibido' una vez iniciado.");
     }
-
     @Override
     public void estadoPreparacion(Pedido pedido) {
-       System.out.println("El pedido se encuentra en preparacion");
+        // Ya está en preparación, no hace nada
     }
-
     @Override
     public void estadoEntregado(Pedido pedido) {
         pedido.cambiarEstado(new Entregado());
-        System.out.println("pedido listo para entregar");
     }
-    
+    @Override
+    public String getNombre() { return "En preparación"; }
 }

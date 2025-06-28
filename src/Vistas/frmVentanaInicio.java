@@ -113,11 +113,13 @@ public class frmVentanaInicio extends javax.swing.JFrame {
     private void btnVerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerActionPerformed
         frmDetalle detalle = new frmDetalle();
         detalle.setVisible(true);
+        setVisible(false);
     }//GEN-LAST:event_btnVerActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         frmCrud Crud =new frmCrud();
         Crud.setVisible(true);
+        setVisible(false);
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     /**

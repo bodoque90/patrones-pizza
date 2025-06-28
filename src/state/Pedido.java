@@ -12,12 +12,25 @@ public class Pedido {
     private IEstadoPizza estado;
      private List<IUsuario> usuarios = new ArrayList<>();
 
+     //este es para contruir pedidos originales
     public Pedido(String nombre, int precioPedido) {
         this.estado = new Recibido();
         this.nombre = nombre;
         this.precio = precioPedido;
 
     }
+        /**
+     * metodo para reconstruir pedido desde la base de datos
+     * @param nombre
+     * @param precioPedido
+     * @param estado 
+     */
+    public Pedido(String nombre, int precioPedido, IEstadoPizza estado) {
+    this.estado = estado;
+    this.nombre = nombre;
+    this.precio = precioPedido;
+}
+  
     //mas mano
     public void agregarUsuario(IUsuario usuario){
     usuarios.add(usuario);}
@@ -51,13 +64,17 @@ public class Pedido {
     public String getEstadoNombre() {
     return this.estado.getNombre();
 }
-
-    public void Print() {
-        System.out.println("\n ********************");
-        System.out.println("nombre del pedido: " + this.nombre);
-        System.out.println("precio del pedido: " + this.precio);
-        System.out.println("Estado: " + this.estado.getNombre());
-        System.out.println("******************** \n");
+public static IEstadoPizza obtenerEstadoDesdeNombre(String nombreEstado) {
+    switch (nombreEstado) {
+        case "Recibido":
+            return new Recibido();
+        case "En preparación":
+            return new EnPreparacion();
+        case "Entregado":
+            return new Entregado();
+        default:
+            return new Recibido(); // Por si acaso
     }
+}
     
 }
