@@ -30,6 +30,7 @@ public class frmCrud extends javax.swing.JFrame {
         initComponents();
         setSize(750, 750);
         setResizable(false);
+        setLocationRelativeTo(null);
 
         setName("Pizzeria Don Titto de Crem");
     }

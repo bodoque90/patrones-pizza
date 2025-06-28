@@ -1,5 +1,8 @@
 
 package observer;
+
+import javax.swing.JOptionPane;
+
 public class Usuario implements IUsuario{
     private String nombre;
 
@@ -14,7 +17,7 @@ public class Usuario implements IUsuario{
 
     @Override
     public void Notificar(String estado) {
-        System.out.println("el pedido de: "+this.nombre +"ha cambiado su estado a :"+estado);
+        JOptionPane.showMessageDialog(null, "El pedido de "+nombre+" a cambiado al estado : "+estado);
     }
 
     

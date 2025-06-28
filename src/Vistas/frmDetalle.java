@@ -1,6 +1,7 @@
 package Vistas;
 
 import ConexionBs.conexion;
+import Controller.ClientesController;
 import Controller.pedidosController;
 import com.sun.jdi.connect.spi.Connection;
 import javax.swing.table.DefaultTableModel;
@@ -17,29 +18,35 @@ public class frmDetalle extends javax.swing.JFrame {
     public frmDetalle() {
         initComponents();
         setSize(750, 700);
+        setLocationRelativeTo(null);
         setResizable(false);
         datosTabla();
-        txtPizza.setEditable(false);
-        txtPrecio.setEditable(false);
-        txtEstadoActual.setEditable(false);
+        txtPizza.setEnabled(false);
+        txtPrecio.setEnabled(false);
+        txtEstadoActual.setEnabled(false);
     }
     private Pedido pedidoActual;
+    private String nombre;
 
     private void buscarPedido() {
         conexion conectar = new conexion();
         conectar.establecerConexion();
         pedidosController pedidosController1 = new pedidosController(conectar);
+        ClientesController clienteController = new ClientesController(conectar);
         try {
             int idCliente = Integer.parseInt(txtIdCliente.getText().trim());
             pedidoActual = pedidosController1.buscarPedidoPorId(idCliente);
+            nombre = clienteController.obtenerNombreClientePorId(idCliente);
 
             if (pedidoActual != null) {
                 txtPizza.setText(pedidoActual.getNombrePizza());
                 txtPrecio.setText(String.valueOf(pedidoActual.getPrecioTotal()));
                 txtEstadoActual.setText(pedidoActual.getEstadoNombre());
+                pedidoActual.agregarUsuario(new observer.Usuario(nombre));
             } else {
                 JOptionPane.showMessageDialog(this, "No se encontró pedido para ese ID de cliente");
             }
+            
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error al buscar pedido: " + ex.getMessage());
         }
@@ -53,6 +60,7 @@ public class frmDetalle extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Primero busque un pedido.");
             return;
         }
+        
         String nuevoEstado = (String) cmbEstados.getSelectedItem();
         int idCliente = Integer.parseInt(txtIdCliente.getText().trim());
         try {
@@ -62,6 +70,7 @@ public class frmDetalle extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "¡Transición de estado inválida! Debes seguir el orden correcto.");
             } else {
                 // Si tienes una tabla, refresca aquí
+                
                 datosTabla();
             }
         } catch (Exception ex) {

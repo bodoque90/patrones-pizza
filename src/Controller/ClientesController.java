@@ -30,4 +30,24 @@ public class ClientesController {
         }
         return -1;
     }
+    
+     public String obtenerNombreClientePorId(int idCliente) {
+        String nombre = null;
+        try {
+            Connection conn = conexionDb.establecerConexion();
+            String sql = "SELECT nombre FROM clientes WHERE idCliente = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, idCliente);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                nombre = rs.getString("nombre");
+            }
+            rs.close();
+            ps.close();
+            conn.close();
+        } catch (Exception e) {
+            System.out.println("Error al obtener nombre del cliente: " + e.getMessage());
+        }
+        return nombre;
+    }
 }

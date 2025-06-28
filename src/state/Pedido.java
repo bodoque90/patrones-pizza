@@ -43,21 +43,22 @@ public class Pedido {
 
     public void recibido() {
         this.estado.estadoRecibido(this);
-        notificarlos();
+        
     }
 
     public void enPreparacion() {
         this.estado.estadoPreparacion(this);
-        notificarlos();
+        
     }
 
     public void entregado() {
         this.estado.estadoEntregado(this);
-        notificarlos();
+        
     }
 
     public void cambiarEstado(IEstadoPizza estado) {
         this.estado = estado;
+        notificarlos();
 
     }
         public String getNombrePizza() {
