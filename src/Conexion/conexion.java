@@ -1,4 +1,4 @@
-package ConexionBs;
+package Conexion;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,13 +11,16 @@ public class conexion {
     String bd = "bsPizzeria";
     String url = "jdbc:mysql://localhost:3306/" + bd;
     String usuario = "root";
-    String contraseña = "Dracogamer90$";
+    String contraseña = "Dracogamer90$"; //insertar contraseña
 
     Connection estadoConexion = null;
 
     public Statement sentencia;
     public ResultSet Resultado;
-    
+    /**
+     * 
+     * @return retorna si se realizo lo conexion a la base de datos correctamente
+     */
     public Connection establecerConexion() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -29,6 +32,9 @@ public class conexion {
         return estadoConexion;
     }
 
+    /**
+     * cierra la conexion de la base de datos
+     */
     public void cerrarConexion() {
         try {
             if (estadoConexion != null) {
@@ -39,7 +45,11 @@ public class conexion {
             System.err.println("Error");
         }
     }
-
+    
+    /**
+     * 
+     * @return retorna el nombre de la base de datos
+     */
     public String getBd() {
         return bd;
     }

@@ -1,9 +1,9 @@
 
-package decorator;
+package Principal;
 
 
-import ConexionBs.conexion;
-import Vistas.frmVentanaInicio;
+import Conexion.conexion;
+import Vista.frmVentanaInicio;
 import javax.swing.UIManager;
 import state.Pedido;
 import observer.Usuario;

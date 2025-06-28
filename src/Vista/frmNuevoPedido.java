@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package Vistas;
+package Vista;
 
-import ConexionBs.conexion;
+import Conexion.conexion;
 import Controller.ClientesController;
 import Controller.pedidosController;
 import decorator.IPizza;
@@ -21,31 +21,41 @@ import state.Pedido;
  *
  * @author Hogar
  */
-public class frmCrud extends javax.swing.JFrame {
+public class frmNuevoPedido extends javax.swing.JFrame {
 
     /**
      * Creates new form frmCrud
      */
-    public frmCrud() {
+    public frmNuevoPedido() {
         initComponents();
-        setSize(750, 750);
+        setSize(700, 600);
         setResizable(false);
         setLocationRelativeTo(null);
 
         setName("Pizzeria Don Titto de Crem");
     }
 
+    /**
+     * Crea una nueva pizza personalizada y la guarda como un pedido en la base de datos.
+     *
+     * Funcionamiento: 1. Establece la conexión a la base de datos. 2. Crea el objeto base de pizza según la selección del usuario (napolitana o pepperoni). 3. Aplica los ingredientes extra seleccionados (queso, BBQ, pepperoni) usando el patrón Decorator. 4. Obtiene el nombre del cliente desde el campo de texto. 5. Si el nombre está vacío, muestra un mensaje y no continúa. 6. Si hay nombre: a. Crea un objeto Usuario y un Pedido con la descripción y precio de la pizza. b. Registra al usuario como observer del pedido. c. Usa los controladores para guardar el cliente y el pedido en la base de datos. d. Si todo sale bien, muestra los detalles del pedido. Si no, muestra mensajes de error apropiados.
+     */
     private void crearNuevaPizza() {
+        // 1. Establece la conexión a la base de datos.
         conexion conectar = new conexion();
         conectar.establecerConexion();
-        
+
         Usuario usuario = null;
         IPizza base;
+
+        // 2. Crea el objeto base de pizza según la selección.
         if (cmbPizza.getSelectedItem().equals("napolitana")) {
             base = new pizzaNapolitana();
         } else {
             base = new pizzaPepperoni();
         }
+
+        // 3. Aplica ingredientes extra usando el patrón Decorator.
         if (chkExtraQueso.isSelected()) {
             base = new extraQueso(base);
         }
@@ -55,43 +65,51 @@ public class frmCrud extends javax.swing.JFrame {
         if (chkExtraPepp.isSelected()) {
             base = new extraPeperoni(base);
         }
+
+        // 4. Obtiene el nombre del cliente.
         String nombre = txtNombreUser.getText();
+
+        // 5. Verifica si el nombre está vacío.
         if (nombre.length() == 0) {
             JOptionPane.showMessageDialog(null, "debe ingresar un nombre para la orden");
         } else {
+            // 6a. Crea el usuario y el pedido.
             usuario = new Usuario(nombre);
             Pedido pedido = new Pedido(base.getDescripcion(), base.getPrecio());
-            pedido.agregarUsuario(usuario);
+            pedido.agregarUsuario(usuario); // Registra al usuario como observer
             String tipoEstado = pedido.getEstadoNombre();
-            
-            // GUARDAR EN BASE DE DATOS USANDO CONTROLLERS
-        ClientesController clientesController = new ClientesController(conectar);
-        int idCliente = clientesController.guardarClienteYObtenerId(nombre);
 
-        if (idCliente != -1) {
-            pedidosController pedidosController = new pedidosController(conectar);
-            boolean pedidoGuardado = pedidosController.guardarPedido(
-                idCliente,
-                base.getDescripcion(),
-                tipoEstado,
-                base.getPrecio()
-            );
-            if (pedidoGuardado) {
-                String mensaje = "Producto agregado exitosamente\n"
-                        + "-----------------------------------\n"
-                        + "Cliente: " + nombre + "\n"
-                        + "Tipo de Pizza: " + base.getDescripcion() + "\n"
-                        + "Precio Total: $" + base.getPrecio() + "\n"
-                        + "Estado: " + tipoEstado;
-                JOptionPane.showMessageDialog(null, mensaje);
+            // 6c. Usa controladores para guardar en la base de datos.
+            ClientesController clientesController = new ClientesController(conectar);
+            int idCliente = clientesController.guardarClienteYObtenerId(nombre);
+
+            if (idCliente != -1) {
+                pedidosController pedidosController = new pedidosController(conectar);
+                boolean pedidoGuardado = pedidosController.guardarPedido(
+                        idCliente,
+                        base.getDescripcion(),
+                        tipoEstado,
+                        base.getPrecio()
+                );
+                if (pedidoGuardado) {
+                    // 6d. Muestra mensaje de éxito con el detalle del pedido.
+                    String mensaje = "Producto agregado exitosamente\n"
+                            + "-----------------------------------\n"
+                            + "Cliente: " + nombre + "\n"
+                            + "Tipo de Pizza: " + base.getDescripcion() + "\n"
+                            + "Precio Total: $" + base.getPrecio() + "\n"
+                            + "Estado: " + tipoEstado;
+                    JOptionPane.showMessageDialog(null, mensaje);
+                } else {
+                    // Si hubo error al guardar el pedido.
+                    JOptionPane.showMessageDialog(null, "No se pudo guardar el pedido en la base de datos.");
+                }
             } else {
-                JOptionPane.showMessageDialog(null, "No se pudo guardar el pedido en la base de datos.");
+                // Si hubo error al guardar el cliente.
+                JOptionPane.showMessageDialog(null, "No se pudo guardar el cliente en la base de datos.");
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "No se pudo guardar el cliente en la base de datos.");
         }
     }
-}
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -111,7 +129,7 @@ public class frmCrud extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(102, 102, 255));
+        jPanel1.setBackground(new java.awt.Color(0, 102, 102));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("Nombre del Cliente");
@@ -125,22 +143,22 @@ public class frmCrud extends javax.swing.JFrame {
         jPanel1.add(txtNombreUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 80, 180, -1));
 
         jLabel2.setText("Seleccione la pizza");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 60, -1, -1));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 60, -1, -1));
 
         cmbPizza.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "napolitana", "pepperoni", " " }));
-        jPanel1.add(cmbPizza, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 80, 180, -1));
+        jPanel1.add(cmbPizza, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 80, 180, -1));
 
         jLabel3.setText("Desea Agregar extras");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 60, -1, -1));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 60, -1, -1));
 
         chkExtraQueso.setText("Queso Extra");
-        jPanel1.add(chkExtraQueso, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 90, -1, -1));
+        jPanel1.add(chkExtraQueso, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 90, -1, -1));
 
         chkExtraBbq.setText("Barbeque Extra");
-        jPanel1.add(chkExtraBbq, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 130, 120, -1));
+        jPanel1.add(chkExtraBbq, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 130, 120, -1));
 
         chkExtraPepp.setText("Pepperoni Extra");
-        jPanel1.add(chkExtraPepp, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 170, 120, -1));
+        jPanel1.add(chkExtraPepp, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 170, 120, -1));
 
         btnCrear.setText("Agregar");
         btnCrear.addActionListener(new java.awt.event.ActionListener() {
@@ -205,20 +223,21 @@ public class frmCrud extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmCrud.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmNuevoPedido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmCrud.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmNuevoPedido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmCrud.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmNuevoPedido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmCrud.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmNuevoPedido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmCrud().setVisible(true);
+                new frmNuevoPedido().setVisible(true);
             }
         });
     }
