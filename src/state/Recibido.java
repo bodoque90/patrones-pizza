@@ -6,7 +6,7 @@ public class Recibido implements IEstadoPizza{
 
     @Override
     public String getNombre() {
-       return "En preparacion";
+       return "Recibido";
     }
 
     @Override

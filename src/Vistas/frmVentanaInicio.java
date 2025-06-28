@@ -16,6 +16,7 @@ public class frmVentanaInicio extends javax.swing.JFrame {
     public frmVentanaInicio() {
         initComponents();
         setSize(700, 600);
+        setTitle("Pizzeria Don Titto");
     }
 
     /**

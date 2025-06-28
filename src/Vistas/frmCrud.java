@@ -56,12 +56,12 @@ public class frmCrud extends javax.swing.JFrame {
             Pedido pedido = new Pedido(base.getDescripcion(), base.getPrecio());
             pedido.agregarUsuario(usuario);
             String tipoEstado = pedido.getEstadoNombre();
-                    String mensaje = "Producto agregado exitosamente\n"
-            + "-----------------------------------\n"
-            + "Cliente: " + nombre + "\n"
-            + "Tipo de Pizza: " + base.getDescripcion() + "\n"
-            + "Precio Total: $" + base.getPrecio() + "\n"
-            + "Estado: " + tipoEstado;
+            String mensaje = "Producto agregado exitosamente\n"
+                    + "-----------------------------------\n"
+                    + "Cliente: " + nombre + "\n"
+                    + "Tipo de Pizza: " + base.getDescripcion() + "\n"
+                    + "Precio Total: $" + base.getPrecio() + "\n"
+                    + "Estado: " + tipoEstado;
             JOptionPane.showMessageDialog(null, mensaje);
         }
     }
@@ -79,7 +79,8 @@ public class frmCrud extends javax.swing.JFrame {
         chkExtraQueso = new javax.swing.JCheckBox();
         chkExtraBbq = new javax.swing.JCheckBox();
         chkExtraPepp = new javax.swing.JCheckBox();
-        btnAgregar = new javax.swing.JToggleButton();
+        btnCrear = new javax.swing.JToggleButton();
+        btnVolver = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -114,13 +115,22 @@ public class frmCrud extends javax.swing.JFrame {
         chkExtraPepp.setText("Pepperoni Extra");
         jPanel1.add(chkExtraPepp, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 170, 120, -1));
 
-        btnAgregar.setText("Agregar");
-        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+        btnCrear.setText("Agregar");
+        btnCrear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAgregarActionPerformed(evt);
+                btnCrearActionPerformed(evt);
             }
         });
-        jPanel1.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 220, -1, -1));
+        jPanel1.add(btnCrear, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 200, 110, 40));
+
+        btnVolver.setText("<html><p>Volver</p></html>");
+        btnVolver.setActionCommand("Volver");
+        btnVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVolverActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 204, 110, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -140,10 +150,16 @@ public class frmCrud extends javax.swing.JFrame {
 
     }//GEN-LAST:event_txtNombreUserActionPerformed
 
-    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+    private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
         crearNuevaPizza();
 
-    }//GEN-LAST:event_btnAgregarActionPerformed
+    }//GEN-LAST:event_btnCrearActionPerformed
+
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        frmVentanaInicio Inicio = new frmVentanaInicio();
+        Inicio.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnVolverActionPerformed
 
     /**
      * @param args the command line arguments
@@ -181,7 +197,8 @@ public class frmCrud extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JToggleButton btnAgregar;
+    private javax.swing.JToggleButton btnCrear;
+    private javax.swing.JToggleButton btnVolver;
     private javax.swing.JCheckBox chkExtraBbq;
     private javax.swing.JCheckBox chkExtraPepp;
     private javax.swing.JCheckBox chkExtraQueso;
