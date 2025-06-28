@@ -1,32 +1,18 @@
-
 create database bsPizzeria;
 use bsPizzeria;
 
 create table clientes(
-    idCliente int(12) not null auto_increment primary key,
-    nombre varchar(100) not null,
-    telefono int(15) not null,
-    direccion varchar(100) not null,
-    email varchar(50),
-);
-
-create table ingredientes(
-    idIngrediente int(12) not null auto_increment primary key,
+    idCliente int auto_increment primary key,
     nombre varchar(100) not null
 );
 
-create table pizzas(
-    id int(12) not null auto_increment primary key,
-    nombre varchar(100) not null,
-    precio decimal(8,5) not null
+create table pedidos(
+    idPedido int auto_increment primary key,
+    idCliente int not null,
+    nombrePizza varchar(100) not null,
+    ingredientes varchar(255) not null,
+    fecha datetime not null,
+    cantidad int not null,
+    precioTotal decimal(10,2) not null,
+    foreign key (idCliente) references clientes(idCliente)
 );
-
-create table PizzaIngredientes(
-    idPizza int(12),
-    idIngrediente int(12),
-    cantidad int(3) not null,
-    primary key(idPizza, idIngrediente),
-    foreign key(idPizza) references pizzas(id),
-    foreign key(idIngrediente) references ingredientes(idIngrediente)
-);
-
