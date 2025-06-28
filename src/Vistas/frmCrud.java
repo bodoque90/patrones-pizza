@@ -4,6 +4,9 @@
  */
 package Vistas;
 
+import ConexionBs.conexion;
+import Controller.ClientesController;
+import Controller.pedidosController;
 import decorator.IPizza;
 import decorator.extraBarbeque;
 import decorator.extraPeperoni;
@@ -32,6 +35,9 @@ public class frmCrud extends javax.swing.JFrame {
     }
 
     private void crearNuevaPizza() {
+        conexion conectar = new conexion();
+        conectar.establecerConexion();
+        
         Usuario usuario = null;
         IPizza base;
         if (cmbPizza.getSelectedItem().equals("napolitana")) {
@@ -56,15 +62,35 @@ public class frmCrud extends javax.swing.JFrame {
             Pedido pedido = new Pedido(base.getDescripcion(), base.getPrecio());
             pedido.agregarUsuario(usuario);
             String tipoEstado = pedido.getEstadoNombre();
-            String mensaje = "Producto agregado exitosamente\n"
-                    + "-----------------------------------\n"
-                    + "Cliente: " + nombre + "\n"
-                    + "Tipo de Pizza: " + base.getDescripcion() + "\n"
-                    + "Precio Total: $" + base.getPrecio() + "\n"
-                    + "Estado: " + tipoEstado;
-            JOptionPane.showMessageDialog(null, mensaje);
+            
+            // GUARDAR EN BASE DE DATOS USANDO CONTROLLERS
+        ClientesController clientesController = new ClientesController(conectar);
+        int idCliente = clientesController.guardarClienteYObtenerId(nombre);
+
+        if (idCliente != -1) {
+            pedidosController pedidosController = new pedidosController(conectar);
+            boolean pedidoGuardado = pedidosController.guardarPedido(
+                idCliente,
+                base.getDescripcion(),
+                tipoEstado,
+                base.getPrecio()
+            );
+            if (pedidoGuardado) {
+                String mensaje = "Producto agregado exitosamente\n"
+                        + "-----------------------------------\n"
+                        + "Cliente: " + nombre + "\n"
+                        + "Tipo de Pizza: " + base.getDescripcion() + "\n"
+                        + "Precio Total: $" + base.getPrecio() + "\n"
+                        + "Estado: " + tipoEstado;
+                JOptionPane.showMessageDialog(null, mensaje);
+            } else {
+                JOptionPane.showMessageDialog(null, "No se pudo guardar el pedido en la base de datos.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No se pudo guardar el cliente en la base de datos.");
         }
     }
+}
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

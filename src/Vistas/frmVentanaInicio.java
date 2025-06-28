@@ -28,12 +28,18 @@ public class frmVentanaInicio extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
         jPanel1 = new javax.swing.JPanel();
         lblBienvenida = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         btnCatalogo = new javax.swing.JButton();
         btnVer = new javax.swing.JButton();
         btnNuevo = new javax.swing.JButton();
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -155,6 +161,8 @@ public class frmVentanaInicio extends javax.swing.JFrame {
     private javax.swing.JButton btnVer;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel lblBienvenida;
     // End of variables declaration//GEN-END:variables
 }
