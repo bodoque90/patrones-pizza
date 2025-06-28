@@ -138,7 +138,7 @@ public class frmModificarPedido extends javax.swing.JFrame {
             // 4. Realiza la consulta SQL para obtener los datos de clientes y pedidos.
             Statement leerDatos = objConexion.establecerConexion().createStatement();
             String sql = "SELECT c.idCliente, c.nombre AS nombreCliente, p.idPedido, p.nombrePizza, p.estado, p.precioTotal "
-                    + "FROM clientes c JOIN pedidos p ON c.idCliente = p.idCliente";
+                    + "FROM cliente c JOIN pedido p ON c.idCliente = p.idCliente";
             ResultSet resultado = leerDatos.executeQuery(sql);
 
             // 5. Recorre cada fila del resultado y la agrega al modelo de la tabla.

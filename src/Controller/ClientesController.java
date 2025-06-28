@@ -24,7 +24,7 @@ public class ClientesController {
      */
     public int guardarClienteYObtenerId(String nombre) {
         Connection con = conexionDb.establecerConexion();
-        String sql = "INSERT INTO clientes (nombre) VALUES (?)";
+        String sql = "INSERT INTO cliente (nombre) VALUES (?)";
         try (PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, nombre);
             ps.executeUpdate();
@@ -49,7 +49,7 @@ public class ClientesController {
         String nombre = null;
         try {
             Connection conn = conexionDb.establecerConexion();
-            String sql = "SELECT nombre FROM clientes WHERE idCliente = ?";
+            String sql = "SELECT nombre FROM cliente WHERE idCliente = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, idCliente);
             ResultSet rs = ps.executeQuery();

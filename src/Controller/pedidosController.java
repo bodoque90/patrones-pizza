@@ -28,7 +28,7 @@ public class pedidosController {
      */
     public boolean guardarPedido(int idCliente, String nombrePizza, String estado, int precioTotal) {
         Connection con = conexionDb.establecerConexion();
-        String sql = "INSERT INTO pedidos (idCliente, nombrePizza, estado, precioTotal) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO pedido (idCliente, nombrePizza, estado, precioTotal) VALUES (?, ?, ?, ?)";
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idCliente);
             ps.setString(2, nombrePizza);
@@ -54,7 +54,7 @@ public class pedidosController {
      * Funcionamiento: 1. Prepara una consulta SQL para seleccionar el nombre de la pizza, el precio y el estado del pedido del cliente. 2. Establece la conexión y prepara la consulta con el ID del cliente. 3. Ejecuta la consulta y verifica si hay resultados. 4. Si encuentra un pedido: a. Obtiene los valores de la pizza, el precio y el estado. b. Convierte el estado obtenido de la base de datos al tipo IEstadoPizza usando un método de la clase Pedido. c. Crea y retorna un nuevo objeto Pedido con los datos recuperados. 5. Cierra la conexión y retorna el pedido (o null si no se encontró).
      */
     public Pedido buscarPedidoPorId(int idCliente) throws Exception {
-        String sql = "SELECT nombrePizza, precioTotal, estado FROM pedidos WHERE idCliente = ?";
+        String sql = "SELECT nombrePizza, precioTotal, estado FROM pedido WHERE idCliente = ?";
         conexion objConexion = new conexion();
         PreparedStatement consultaPreparada = objConexion.establecerConexion().prepareStatement(sql);
         consultaPreparada.setInt(1, idCliente);
@@ -102,7 +102,7 @@ public class pedidosController {
         if (pedido.getEstadoNombre().equals(nuevoEstado) && !estadoAntes.equals(nuevoEstado)) {
 
             // 4. Actualiza el estado en la base de datos
-            String sqlUpdate = "UPDATE pedidos SET estado = ? WHERE idCliente = ?";
+            String sqlUpdate = "UPDATE pedido SET estado = ? WHERE idCliente = ?";
             PreparedStatement psUpdate = objConexion.establecerConexion().prepareStatement(sqlUpdate);
             psUpdate.setString(1, nuevoEstado);
             psUpdate.setInt(2, idCliente);
