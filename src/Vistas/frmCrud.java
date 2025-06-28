@@ -55,7 +55,14 @@ public class frmCrud extends javax.swing.JFrame {
             usuario = new Usuario(nombre);
             Pedido pedido = new Pedido(base.getDescripcion(), base.getPrecio());
             pedido.agregarUsuario(usuario);
-            JOptionPane.showMessageDialog(null, "Producto: " + base.getDescripcion() + " $" + base.getPrecio() + " agregado exitosamente..");
+            String tipoEstado = pedido.getEstadoNombre();
+                    String mensaje = "Producto agregado exitosamente\n"
+            + "-----------------------------------\n"
+            + "Cliente: " + nombre + "\n"
+            + "Tipo de Pizza: " + base.getDescripcion() + "\n"
+            + "Precio Total: $" + base.getPrecio() + "\n"
+            + "Estado: " + tipoEstado;
+            JOptionPane.showMessageDialog(null, mensaje);
         }
     }
 

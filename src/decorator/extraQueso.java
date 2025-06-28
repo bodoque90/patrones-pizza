@@ -8,7 +8,7 @@ public class extraQueso extends ingredienteBase {
 
     @Override
     public String getDescripcion() {
-        return this.base.getDescripcion() + " extra queso";
+        return this.base.getDescripcion() + " + extra queso";
     }
 
     @Override

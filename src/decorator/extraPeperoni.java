@@ -9,7 +9,7 @@ public class extraPeperoni extends ingredienteBase {
 
     @Override
     public String getDescripcion() {
-        return this.base.getDescripcion() + " extra peperoni";
+        return this.base.getDescripcion() + " + extra peperoni";
     }
 
     @Override

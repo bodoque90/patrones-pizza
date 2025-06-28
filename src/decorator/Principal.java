@@ -2,6 +2,7 @@
 package decorator;
 
 import Vistas.frmCrud;
+import Vistas.frmVentanaInicio;
 import state.Pedido;
 import observer.Usuario;
 public class Principal {
@@ -22,7 +23,7 @@ public class Principal {
         p1.Print();
         
         
-        frmCrud formulario = new frmCrud();
+        frmVentanaInicio formulario = new frmVentanaInicio();
         formulario.setVisible(true);
 
         

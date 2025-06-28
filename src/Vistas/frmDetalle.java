@@ -48,7 +48,7 @@ public class frmDetalle extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tblDetalle);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, 610, 440));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 610, 440));
 
         btnVolver.setText("Volver");
         jPanel1.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 630, -1, -1));

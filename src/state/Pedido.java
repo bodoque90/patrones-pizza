@@ -47,6 +47,10 @@ public class Pedido {
         this.estado = estado;
 
     }
+    
+    public String getEstadoNombre() {
+    return this.estado.getNombre();
+}
 
     public void Print() {
         System.out.println("\n ********************");
@@ -55,5 +59,5 @@ public class Pedido {
         System.out.println("Estado: " + this.estado.getNombre());
         System.out.println("******************** \n");
     }
-
+    
 }
