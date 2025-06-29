@@ -166,7 +166,7 @@ public class frmNuevoPedido extends javax.swing.JFrame {
                 btnCrearActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCrear, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 200, 110, 40));
+        jPanel1.add(btnCrear, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 210, 110, 40));
 
         btnVolver.setText("<html><p>Volver</p></html>");
         btnVolver.setActionCommand("Volver");
@@ -175,7 +175,7 @@ public class frmNuevoPedido extends javax.swing.JFrame {
                 btnVolverActionPerformed(evt);
             }
         });
-        jPanel1.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 204, 110, 40));
+        jPanel1.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 210, 110, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

@@ -4,18 +4,43 @@
  */
 package Vista;
 
+import Conexion.conexion;
+import java.sql.Connection;
+import java.awt.Color;
+
+
 /**
  *
  * @author z25lo
  */
 public class frmVentanaInicio extends javax.swing.JFrame {
+    
+    conexion obConexion = new conexion();
+    Connection conect = obConexion.establecerConexion();
+    
+        public void estadoConexion() {
+        if (conect != null) {
+            lblEstado.setForeground(Color.blue);
+            lblEstado.setText("Conectado a " + obConexion.getBd());
+        } else {
+            lblEstado.setForeground(Color.red);
+            lblEstado.setText("No se pudo conectar");
+
+        }
+    }
 
     public frmVentanaInicio() {
         initComponents();
         setSize(700, 600);
         setTitle("Pizzeria Don Titto");
         setLocationRelativeTo(null);
+        estadoConexion();
     }
+    
+    
+    
+
+
 
 
     @SuppressWarnings("unchecked")
@@ -31,6 +56,7 @@ public class frmVentanaInicio extends javax.swing.JFrame {
         btnNuevo = new javax.swing.JButton();
         lblBienvenida = new javax.swing.JLabel();
         lblBienvenida1 = new javax.swing.JLabel();
+        lblEstado = new javax.swing.JLabel();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -74,6 +100,9 @@ public class frmVentanaInicio extends javax.swing.JFrame {
         lblBienvenida1.setFont(new java.awt.Font("Segoe UI Black", 0, 36)); // NOI18N
         lblBienvenida1.setText("Bienvenido");
         jPanel2.add(lblBienvenida1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 40, 230, 50));
+
+        lblEstado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/Network-High-Connection-icon.png"))); // NOI18N
+        jPanel2.add(lblEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 740, 600));
 
@@ -152,5 +181,6 @@ public class frmVentanaInicio extends javax.swing.JFrame {
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel lblBienvenida;
     private javax.swing.JLabel lblBienvenida1;
+    private javax.swing.JLabel lblEstado;
     // End of variables declaration//GEN-END:variables
 }
